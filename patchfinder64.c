@@ -2412,6 +2412,24 @@ addr_t find_hook_cred_label_update_execve() {
     return start + kerndumpbase;
 }
 
+addr_t find_platform_set_container() {
+    addr_t ref = find_strref("com.apple.sandbox.container", true, true);
+    
+    if (!ref) {
+        return 0;
+    }
+    
+    ref -= kerndumpbase;
+    
+    uint64_t start = bof64(kernel, prelink_base, ref);
+    
+    if (!start) {
+        return 0;
+    }
+    
+    return start + kerndumpbase;
+}
+
 /*
  *
  *
@@ -2537,6 +2555,7 @@ main(int argc, char **argv)
     FIND(fs_snapshot);
     FIND(vnode_get_snapshot);
     FIND(hook_cred_label_update_execve);
+    FIND(platform_set_container);
 
     term_kernel();
     return EXIT_SUCCESS;
