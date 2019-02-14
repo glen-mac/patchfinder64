@@ -2393,6 +2393,25 @@ addr_t find_vnode_get_snapshot() {
 
     return func + kerndumpbase;
 }
+
+addr_t find_hook_cred_label_update_execve() {
+    addr_t ref = find_strref("only launchd is allowed to spawn untrusted binaries", true, true);
+    
+    if (!ref) {
+        return 0;
+    }
+    
+    ref -= kerndumpbase;
+    
+    uint64_t start = bof64(kernel, prelink_base, ref);
+    
+    if (!start) {
+        return 0;
+    }
+    
+    return start + kerndumpbase;
+}
+
 /*
  *
  *
@@ -2517,6 +2536,7 @@ main(int argc, char **argv)
     FIND(mount_common);
     FIND(fs_snapshot);
     FIND(vnode_get_snapshot);
+    FIND(hook_cred_label_update_execve);
 
     term_kernel();
     return EXIT_SUCCESS;

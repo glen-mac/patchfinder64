@@ -59,5 +59,6 @@ uint64_t find_fs_lookup_snapshot_metadata_by_name(void);
 uint64_t find_mount_common(void);
 uint64_t find_fs_snapshot(void);
 uint64_t find_vnode_get_snapshot(void);
+uint64_t find_hook_cred_label_update_execve(void);
 
 #endif
